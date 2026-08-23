@@ -1,40 +1,25 @@
-from pathlib import Path
 import pickle
 import re
 
 import numpy as np
 import pdfplumber
-from sentence_transformers import SentenceTransformer
 
-from backend.config import (
-    DOCS_DIR,
-    PROCESSED_DATA_DIR,
-)
+from backend.config import DOCS_DIR, PROCESSED_DATA_DIR
 
 
 class DocumentService:
     """
-    Handles:
-
-    1. PDF document extraction
-    2. Text chunking
-    3. Embedding generation
-    4. Local vector store persistence
-    5. Semantic document search
-    6. Account-scoped document access
-    7. Source metadata for reliability handling
+    Handles PDF extraction, text chunking, embedding generation,
+    vector-store persistence, semantic search and document access control.
     """
 
     def __init__(self):
-        print("Loading embedding model...")
-
-        self.model = SentenceTransformer(
-            "all-MiniLM-L6-v2"
-        )
+        # The model is loaded only when semantic search or document
+        # ingestion needs it. This keeps Streamlit startup fast.
+        self.model = None
 
         self.vector_store_dir = (
-            PROCESSED_DATA_DIR
-            / "vector_store"
+            PROCESSED_DATA_DIR / "vector_store"
         )
 
         self.vector_store_path = (
@@ -53,13 +38,40 @@ class DocumentService:
         self.load_vector_store()
 
     # ============================================================
+    # LAZY MODEL LOADING
+    # ============================================================
+
+    def _get_model(self):
+        """
+        Load and cache the embedding model only when required.
+
+        Importing sentence-transformers inside this method prevents
+        Torch and Transformers from loading during Streamlit startup.
+        """
+
+        if self.model is None:
+            print("Loading embedding model...")
+
+            from sentence_transformers import (
+                SentenceTransformer,
+            )
+
+            self.model = SentenceTransformer(
+                "all-MiniLM-L6-v2"
+            )
+
+            print("Embedding model loaded.")
+
+        return self.model
+
+    # ============================================================
     # DOCUMENT METADATA
     # ============================================================
 
     def get_document_metadata(self, filename):
         """
-        Assign reliability, authority and access scope
-        based on the supplied ParcelPilot documents.
+        Assign reliability, authority and access scope based on
+        the supplied ParcelPilot documents.
         """
 
         metadata_map = {
@@ -71,7 +83,6 @@ class DocumentService:
                 "scope": "GLOBAL",
                 "account_id": "GLOBAL",
             },
-
             "02_Support_Policy_v2_DEPRECATED.pdf": {
                 "source_type": "support_policy",
                 "status": "DEPRECATED",
@@ -80,7 +91,6 @@ class DocumentService:
                 "scope": "GLOBAL",
                 "account_id": "GLOBAL",
             },
-
             "03_Cancellation_and_Service_Credit_SOP_v4.pdf": {
                 "source_type": "sop",
                 "status": "CURRENT",
@@ -89,7 +99,6 @@ class DocumentService:
                 "scope": "GLOBAL",
                 "account_id": "GLOBAL",
             },
-
             "04_Product_Operations_Guide_and_Known_Issues.pdf": {
                 "source_type": "product_documentation",
                 "status": "CURRENT",
@@ -98,7 +107,6 @@ class DocumentService:
                 "scope": "GLOBAL",
                 "account_id": "GLOBAL",
             },
-
             "05_Northstar_Logistics_Enterprise_Agreement.pdf": {
                 "source_type": "customer_agreement",
                 "status": "ACTIVE",
@@ -107,7 +115,6 @@ class DocumentService:
                 "scope": "ACCOUNT",
                 "account_id": "ACCT-001",
             },
-
             "06_LumenWorks_Service_Agreement.pdf": {
                 "source_type": "customer_agreement",
                 "status": "ACTIVE",
@@ -138,15 +145,7 @@ class DocumentService:
 
     def extract_pages(self, pdf_path):
         """
-        Extract text from each page of a PDF.
-
-        Returns:
-        [
-            {
-                "page": 1,
-                "text": "..."
-            }
-        ]
+        Extract and clean text from every page in a PDF.
         """
 
         pages = []
@@ -177,13 +176,12 @@ class DocumentService:
 
     def clean_text(self, text):
         """
-        Normalise whitespace extracted from PDFs.
+        Normalize whitespace extracted from PDFs.
         """
 
         if not text:
             return ""
 
-        # Replace repeated whitespace/newlines with one space
         text = re.sub(
             r"\s+",
             " ",
@@ -203,17 +201,13 @@ class DocumentService:
         overlap=200,
     ):
         """
-        Split document text into overlapping chunks.
-
-        Character-based chunking is sufficient for
-        this assessment-sized document pack.
+        Split text into overlapping chunks.
         """
 
         if not text:
             return []
 
         chunks = []
-
         start = 0
         text_length = len(text)
 
@@ -225,7 +219,7 @@ class DocumentService:
 
             chunk = text[start:end]
 
-            # Try not to cut in the middle of a sentence
+            # Avoid cutting a sentence in the middle when possible.
             if end < text_length:
                 last_period = chunk.rfind(". ")
 
@@ -241,7 +235,6 @@ class DocumentService:
             if end >= text_length:
                 break
 
-            # Prevent infinite loop
             next_start = end - overlap
 
             if next_start <= start:
@@ -260,10 +253,7 @@ class DocumentService:
         reset_collection=True,
     ):
         """
-        Read all PDFs from DOCS_DIR, extract text,
-        create chunks and generate embeddings.
-
-        reset_collection=True rebuilds the local vector store.
+        Extract PDFs, create chunks and generate embeddings.
         """
 
         if reset_collection:
@@ -275,9 +265,7 @@ class DocumentService:
         )
 
         print()
-        print(
-            f"Found {len(pdf_files)} PDF files."
-        )
+        print(f"Found {len(pdf_files)} PDF files.")
 
         if not pdf_files:
             raise FileNotFoundError(
@@ -288,27 +276,20 @@ class DocumentService:
 
         for pdf_path in pdf_files:
             print()
-            print(
-                f"Processing: {pdf_path.name}"
-            )
+            print(f"Processing: {pdf_path.name}")
 
             metadata = self.get_document_metadata(
                 pdf_path.name
             )
 
-            pages = self.extract_pages(
-                pdf_path
-            )
-
+            pages = self.extract_pages(pdf_path)
             file_chunk_count = 0
 
             for page_data in pages:
                 page_number = page_data["page"]
                 page_text = page_data["text"]
 
-                chunks = self.chunk_text(
-                    page_text
-                )
+                chunks = self.chunk_text(page_text)
 
                 for chunk_index, chunk in enumerate(
                     chunks
@@ -326,27 +307,20 @@ class DocumentService:
                         "source_type": metadata[
                             "source_type"
                         ],
-                        "status": metadata[
-                            "status"
-                        ],
+                        "status": metadata["status"],
                         "authority": metadata[
                             "authority"
                         ],
                         "authoritative": metadata[
                             "authoritative"
                         ],
-                        "scope": metadata[
-                            "scope"
-                        ],
+                        "scope": metadata["scope"],
                         "account_id": metadata[
                             "account_id"
                         ],
                     }
 
-                    all_documents.append(
-                        document
-                    )
-
+                    all_documents.append(document)
                     file_chunk_count += 1
 
             print(
@@ -366,7 +340,10 @@ class DocumentService:
             for document in all_documents
         ]
 
-        embeddings = self.model.encode(
+        # Load the model only when ingestion requires it.
+        model = self._get_model()
+
+        embeddings = model.encode(
             texts,
             show_progress_bar=True,
             convert_to_numpy=True,
@@ -413,16 +390,11 @@ class DocumentService:
             self.vector_store_path,
             "wb",
         ) as file:
-            pickle.dump(
-                data,
-                file,
-            )
+            pickle.dump(data, file)
 
         print()
         print("Saved vector store to:")
-        print(
-            self.vector_store_path
-        )
+        print(self.vector_store_path)
 
     # ============================================================
     # LOAD VECTOR STORE
@@ -430,16 +402,12 @@ class DocumentService:
 
     def load_vector_store(self):
         """
-        Load the previously generated embeddings.
+        Load previously generated documents and embeddings.
         """
 
         if not self.vector_store_path.exists():
-            print(
-                "No existing vector store found."
-            )
-            print(
-                "Run document ingestion first."
-            )
+            print("No existing vector store found.")
+            print("Run document ingestion first.")
             return False
 
         try:
@@ -454,9 +422,7 @@ class DocumentService:
                 [],
             )
 
-            embeddings = data.get(
-                "embeddings"
-            )
+            embeddings = data.get("embeddings")
 
             if embeddings is not None:
                 self.embeddings = np.array(
@@ -474,9 +440,7 @@ class DocumentService:
             return True
 
         except Exception as error:
-            print(
-                "Failed to load vector store:"
-            )
+            print("Failed to load vector store:")
             print(error)
 
             self.documents = []
@@ -495,17 +459,7 @@ class DocumentService:
         user_context=None,
     ):
         """
-        Enforce access at retrieval layer.
-
-        GLOBAL documents:
-            Available to all relevant users.
-
-        ACCOUNT documents:
-            Customers can access only their own
-            account's agreement.
-
-            Internal support users may access account
-            documents as part of authorised support work.
+        Enforce global and account-level document access.
         """
 
         scope = document.get(
@@ -518,22 +472,16 @@ class DocumentService:
             "GLOBAL",
         )
 
-        # Global policies and product documentation
         if scope == "GLOBAL":
             return True
 
-        # Account-scoped document
         if scope == "ACCOUNT":
-
             role = None
 
             if user_context:
-                role = user_context.get(
-                    "role"
-                )
+                role = user_context.get("role")
 
-            # Authorised internal users can access
-            # customer agreements.
+            # Authorized internal users can access agreements.
             if role in [
                 "support",
                 "admin",
@@ -541,7 +489,7 @@ class DocumentService:
             ]:
                 return True
 
-            # Customer access must match account
+            # Customers can access only their own account.
             if user_context:
                 user_account_id = user_context.get(
                     "account_id"
@@ -552,12 +500,7 @@ class DocumentService:
                     == document_account_id
                 )
 
-            # If no user context exists, only allow
-            # explicitly matching account.
-            return (
-                account_id
-                == document_account_id
-            )
+            return account_id == document_account_id
 
         return False
 
@@ -589,10 +532,7 @@ class DocumentService:
             axis=1,
         )
 
-        denominator = (
-            document_norms
-            * query_norm
-        )
+        denominator = document_norms * query_norm
 
         denominator = np.where(
             denominator == 0,
@@ -619,28 +559,7 @@ class DocumentService:
         top_k=5,
     ):
         """
-        Semantic search over the ParcelPilot documents.
-
-        Parameters
-        ----------
-        query:
-            Natural language query.
-
-        account_id:
-            Optional account context.
-
-        user_context:
-            Dictionary containing:
-            - username
-            - role
-            - account_id
-
-        top_k:
-            Maximum number of results.
-
-        IMPORTANT:
-        Account-level access control happens here,
-        before results are returned to the agent.
+        Perform account-aware semantic document search.
         """
 
         if not query or not query.strip():
@@ -659,8 +578,10 @@ class DocumentService:
             ):
                 return []
 
-        # Convert query into embedding
-        query_embedding = self.model.encode(
+        # The embedding model is loaded only when search is used.
+        model = self._get_model()
+
+        query_embedding = model.encode(
             query,
             convert_to_numpy=True,
         )
@@ -670,7 +591,6 @@ class DocumentService:
             dtype=np.float32,
         )
 
-        # Calculate similarity against all chunks
         similarities = self.cosine_similarity(
             query_embedding,
             self.embeddings,
@@ -679,7 +599,6 @@ class DocumentService:
         if len(similarities) == 0:
             return []
 
-        # Sort highest similarity first
         ranked_indices = np.argsort(
             similarities
         )[::-1]
@@ -688,26 +607,17 @@ class DocumentService:
 
         try:
             top_k = int(top_k)
-        except (
-            TypeError,
-            ValueError,
-        ):
+        except (TypeError, ValueError):
             top_k = 5
 
         if top_k < 1:
             top_k = 1
 
-        # Search more than top_k because some high-ranking
-        # documents may be blocked by access control.
+        # Examine additional results because access control can
+        # reject some high-ranking documents.
         for index in ranked_indices:
+            document = self.documents[int(index)]
 
-            document = self.documents[
-                int(index)
-            ]
-
-            # ------------------------------------------------
-            # RETRIEVAL-LAYER ACCESS CONTROL
-            # ------------------------------------------------
             if not self.is_document_accessible(
                 document=document,
                 account_id=account_id,
@@ -722,15 +632,11 @@ class DocumentService:
                 "chunk_index": document.get(
                     "chunk_index"
                 ),
-                "content": document.get(
-                    "content"
-                ),
+                "content": document.get("content"),
                 "source_type": document.get(
                     "source_type"
                 ),
-                "status": document.get(
-                    "status"
-                ),
+                "status": document.get("status"),
                 "authority": document.get(
                     "authority",
                     0,
@@ -739,9 +645,7 @@ class DocumentService:
                     "authoritative",
                     False,
                 ),
-                "scope": document.get(
-                    "scope"
-                ),
+                "scope": document.get("scope"),
                 "account_id": document.get(
                     "account_id"
                 ),
