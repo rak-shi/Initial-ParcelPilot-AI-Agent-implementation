@@ -14,12 +14,32 @@ def print_results(title, results):
 
     for index, result in enumerate(results, start=1):
 
-        metadata = result["metadata"]
+        # Supports both the old nested metadata format
+        # and the current flattened search-result format.
+        metadata = result.get("metadata", result)
+
+        source = (
+            metadata.get("filename")
+            or metadata.get("source")
+            or result.get("source")
+        )
+
+        page = (
+            metadata.get("page_number")
+            or metadata.get("page")
+            or result.get("page")
+        )
+
+        content = (
+            result.get("content")
+            or metadata.get("content")
+            or ""
+        )
 
         print(f"\nRESULT {index}")
 
-        print(f"Source: {metadata.get('filename')}")
-        print(f"Page: {metadata.get('page_number')}")
+        print(f"Source: {source}")
+        print(f"Page: {page}")
         print(f"Authority: {metadata.get('authority')}")
         print(f"Scope: {metadata.get('scope')}")
         print(
@@ -32,10 +52,9 @@ def print_results(title, results):
         )
 
         print("\nContent:")
-        print(result["content"][:700])
+        print(content[:700])
 
         print("\n" + "-" * 80)
-
 
 def main():
 

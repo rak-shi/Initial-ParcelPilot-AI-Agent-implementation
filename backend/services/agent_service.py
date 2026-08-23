@@ -3,7 +3,7 @@ import re
 from backend.services.data_service import DataService
 from backend.services.document_service import DocumentService
 from backend.services.action_service import ActionService
-
+from backend.services.snapshot_service import get_snapshot_time
 
 class AgentService:
 
@@ -643,7 +643,8 @@ class AgentService:
 
         delay_minutes = (
             self.data_service.get_pickup_delay_minutes(
-                order
+                order,
+                get_snapshot_time(),
             )
         )
 
@@ -1132,32 +1133,16 @@ class AgentService:
 
             account_id = ticket.get("account_id")
 
-        try:
-
-            result = self.action_service.create_escalation(
-                user_context=user_context,
-                account_id=account_id,
-                title="Customer request requires support review",
-                reason=query,
-                priority="P2",
-                related_order_id=order_id,
-                related_ticket_id=ticket_id,
-                details=query,
-            )
-
-        except TypeError:
-
-            # Compatibility with the previous ActionService version.
-            result = self.action_service.create_escalation(
-                user_context,
-                account_id,
-                "Customer request requires support review",
-                query,
-                "P2",
-                order_id,
-                ticket_id,
-                query,
-            )
+        result = self.action_service.prepare_escalation(
+            user_context=user_context,
+            account_id=account_id,
+            reason=query,
+            title="Customer request requires support review",
+            priority="P2",
+            related_order_id=order_id,
+            related_ticket_id=ticket_id,
+            details=query,
+      )
 
         action = (
             result.get("action")
