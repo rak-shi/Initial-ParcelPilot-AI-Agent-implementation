@@ -1,0 +1,272 @@
+[
+  {
+    "action_id": "ACT-075975AB",
+    "action_type": "CREATE_ESCALATION",
+    "status": "EXECUTED",
+    "confirmation_required": false,
+    "created_at": "2026-08-22T08:18:05.250707+00:00",
+    "confirmed_at": "2026-08-22T08:18:05.282385+00:00",
+    "executed_at": "2026-08-22T08:18:05.282385+00:00",
+    "requested_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer",
+      "account_id": "ACCT-001"
+    },
+    "account_id": "ACCT-001",
+    "title": "Cancellation request requires support review",
+    "reason": "Customer requested escalation for cancellation of ORD-1001.",
+    "priority": "P2",
+    "related_order_id": "ORD-1001",
+    "related_ticket_id": null,
+    "details": "Customer wants the cancellation request reviewed by the support team.",
+    "confirmed_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer"
+    }
+  },
+  {
+    "action_id": "ACT-6ED23C29",
+    "action_type": "CREATE_ESCALATION",
+    "status": "EXECUTED",
+    "confirmation_required": false,
+    "created_at": "2026-08-22T14:39:12.236266+00:00",
+    "confirmed_at": "2026-08-22T14:39:12.265168+00:00",
+    "executed_at": "2026-08-22T14:39:12.265168+00:00",
+    "requested_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer",
+      "account_id": "ACCT-001"
+    },
+    "account_id": "ACCT-001",
+    "title": "Customer request requires support review",
+    "reason": "Please escalate order ORD-1001 to the support team.",
+    "priority": "P2",
+    "related_order_id": "ORD-1001",
+    "related_ticket_id": null,
+    "details": "Please escalate order ORD-1001 to the support team.",
+    "confirmed_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer"
+    }
+  },
+  {
+    "action_id": "ACT-BB31AF23",
+    "action_type": "CREATE_ESCALATION",
+    "status": "EXECUTED",
+    "confirmation_required": false,
+    "created_at": "2026-08-22T14:46:23.708009+00:00",
+    "confirmed_at": "2026-08-22T14:46:23.725840+00:00",
+    "executed_at": "2026-08-22T14:46:23.725840+00:00",
+    "requested_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer",
+      "account_id": "ACCT-001"
+    },
+    "account_id": "ACCT-001",
+    "title": "Customer request requires support review",
+    "reason": "Please escalate order ORD-1001 to the support team.",
+    "priority": "P2",
+    "related_order_id": "ORD-1001",
+    "related_ticket_id": null,
+    "details": "Please escalate order ORD-1001 to the support team.",
+    "confirmed_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer"
+    }
+  },
+  {
+    "action_id": "ACT-E2EA192D",
+    "action_type": "CREATE_ESCALATION",
+    "status": "EXECUTED",
+    "confirmation_required": false,
+    "created_at": "2026-08-22T14:54:09.668938+00:00",
+    "confirmed_at": "2026-08-22T14:54:09.700725+00:00",
+    "executed_at": "2026-08-22T14:54:09.700725+00:00",
+    "requested_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer",
+      "account_id": "ACCT-001"
+    },
+    "account_id": "ACCT-001",
+    "title": "ParcelPilot support escalation",
+    "reason": "Please escalate order ORD-1001 to the support team.",
+    "priority": "P2",
+    "related_order_id": "ORD-1001",
+    "related_ticket_id": null,
+    "details": "Escalation prepared from an AI agent request. Explicit confirmation is required before execution.",
+    "confirmed_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer"
+    }
+  },
+  {
+    "action_id": "ACT-9ECB5672",
+    "action_type": "CREATE_ESCALATION",
+    "status": "EXECUTED",
+    "confirmation_required": false,
+    "created_at": "2026-08-22T15:12:03.794246+00:00",
+    "confirmed_at": "2026-08-22T15:12:03.823697+00:00",
+    "executed_at": "2026-08-22T15:12:03.823697+00:00",
+    "requested_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer",
+      "account_id": "ACCT-001"
+    },
+    "account_id": "ACCT-001",
+    "title": "Support escalation for order ORD-1001",
+    "reason": "Please escalate order ORD-1001 to the support team.",
+    "priority": "P2",
+    "related_order_id": "ORD-1001",
+    "related_ticket_id": null,
+    "details": "Please escalate order ORD-1001 to the support team.",
+    "confirmed_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer"
+    }
+  },
+  {
+    "action_id": "ACT-71C30509",
+    "action_type": "CREATE_ESCALATION",
+    "status": "EXECUTED",
+    "confirmation_required": false,
+    "created_at": "2026-08-22T15:29:42.607061+00:00",
+    "confirmed_at": "2026-08-22T15:29:42.638798+00:00",
+    "executed_at": "2026-08-22T15:29:42.638798+00:00",
+    "requested_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer",
+      "account_id": "ACCT-001"
+    },
+    "account_id": "ACCT-001",
+    "title": "Support escalation for order ORD-1001",
+    "reason": "Please escalate order ORD-1001 to the support team.",
+    "priority": "P2",
+    "related_order_id": "ORD-1001",
+    "related_ticket_id": null,
+    "details": "Please escalate order ORD-1001 to the support team.",
+    "confirmed_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer"
+    }
+  },
+  {
+    "action_id": "ACT-2CF62388",
+    "action_type": "CREATE_ESCALATION",
+    "status": "EXECUTED",
+    "confirmation_required": false,
+    "created_at": "2026-08-22T15:33:56.345123+00:00",
+    "confirmed_at": "2026-08-22T15:33:56.363904+00:00",
+    "executed_at": "2026-08-22T15:33:56.363904+00:00",
+    "requested_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer",
+      "account_id": "ACCT-001"
+    },
+    "account_id": "ACCT-001",
+    "title": "Support escalation for order ORD-1001",
+    "reason": "Please escalate order ORD-1001 to the support team.",
+    "priority": "P2",
+    "related_order_id": "ORD-1001",
+    "related_ticket_id": null,
+    "details": "Please escalate order ORD-1001 to the support team.",
+    "confirmed_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer"
+    }
+  },
+  {
+    "action_id": "ACT-01CC3D95",
+    "action_type": "CREATE_ESCALATION",
+    "status": "EXECUTED",
+    "confirmation_required": false,
+    "created_at": "2026-08-23T05:57:28.477786+00:00",
+    "confirmed_at": "2026-08-23T05:57:28.517466+00:00",
+    "executed_at": "2026-08-23T05:57:28.517466+00:00",
+    "requested_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer",
+      "account_id": "ACCT-001"
+    },
+    "account_id": "ACCT-001",
+    "title": "Support escalation for order ORD-1001",
+    "reason": "Please escalate order ORD-1001 to the support team.",
+    "priority": "P2",
+    "related_order_id": "ORD-1001",
+    "related_ticket_id": null,
+    "details": "Please escalate order ORD-1001 to the support team.",
+    "confirmed_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer"
+    }
+  },
+  {
+    "action_id": "ACT-3EF93C17",
+    "action_type": "CREATE_ESCALATION",
+    "status": "EXECUTED",
+    "confirmation_required": false,
+    "created_at": "2026-08-23T05:59:17.404296+00:00",
+    "confirmed_at": "2026-08-23T05:59:17.774067+00:00",
+    "executed_at": "2026-08-23T05:59:17.774067+00:00",
+    "requested_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer",
+      "account_id": "ACCT-001"
+    },
+    "account_id": "ACCT-001",
+    "title": "Support escalation for order ORD-1001",
+    "reason": "Please escalate order ORD-1001 to the support team.",
+    "priority": "P2",
+    "related_order_id": "ORD-1001",
+    "related_ticket_id": null,
+    "details": "Please escalate order ORD-1001 to the support team.",
+    "confirmed_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer"
+    }
+  },
+  {
+    "action_id": "ACT-5C37963C",
+    "action_type": "CREATE_ESCALATION",
+    "status": "EXECUTED",
+    "confirmation_required": false,
+    "created_at": "2026-08-23T06:01:27.779340+00:00",
+    "confirmed_at": "2026-08-23T06:01:27.803240+00:00",
+    "executed_at": "2026-08-23T06:01:27.803240+00:00",
+    "requested_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer",
+      "account_id": "ACCT-001"
+    },
+    "account_id": "ACCT-001",
+    "title": "Support escalation for order ORD-1001",
+    "reason": "Please escalate order ORD-1001 to the support team.",
+    "priority": "P2",
+    "related_order_id": "ORD-1001",
+    "related_ticket_id": null,
+    "details": "Please escalate order ORD-1001 to the support team.",
+    "confirmed_by": {
+      "username": "northstar_customer",
+      "display_name": "Northstar Logistics Customer",
+      "role": "customer"
+    }
+  }
+]
