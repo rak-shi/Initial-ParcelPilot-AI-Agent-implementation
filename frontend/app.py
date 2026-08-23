@@ -36,6 +36,7 @@ except Exception:
 
 from backend.services.agent_service import AgentService
 from backend.services.auth_service import get_user_context
+from backend.services.database_service import DatabaseService
 
 
 # ============================================================
@@ -55,6 +56,12 @@ st.set_page_config(
 
 @st.cache_resource
 def get_agent_service():
+
+    # Streamlit Cloud starts with a fresh filesystem.
+    # Create and populate SQLite from the committed workbook.
+    database = DatabaseService()
+    database.load_workbook()
+
     return AgentService()
 
 
