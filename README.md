@@ -110,55 +110,11 @@ These examples demonstrate role-based access control, account-scoped data access
 
 ---
 
+
 ## 🏗️ Solution Architecture
 
-```text
-                    ┌───────────────────────┐
-                    │      User / Demo      │
-                    │ Northstar / Lumen /   │
-                    │ ParcelPilot Support   │
-                    └───────────┬───────────┘
-                                │
-                                ▼
-                    ┌───────────────────────┐
-                    │   Streamlit Frontend  │
-                    │                       │
-                    │ • User Selection      │
-                    │ • Example Queries     │
-                    │ • Chat Interface      │
-                    │ • Results & Sources   │
-                    └───────────┬───────────┘
-                                │ API Request
-                                ▼
-                    ┌───────────────────────┐
-                    │    FastAPI Backend    │
-                    │                       │
-                    │ • Request Handling    │
-                    │ • Access Context      │
-                    │ • Chat API            │
-                    └───────────┬───────────┘
-                                │
-                                ▼
-                    ┌───────────────────────┐
-                    │   ParcelPilot Agent   │
-                    │                       │
-                    │ • Query Analysis      │
-                    │ • Tool Selection      │
-                    │ • Policy Reasoning    │
-                    │ • Response Generation │
-                    └───────────┬───────────┘
-                                │
-             ┌──────────────────┼──────────────────┐
-             ▼                  ▼                  ▼
-    ┌────────────────┐ ┌────────────────┐ ┌────────────────┐
-    │ Structured Data│ │ Document Search│ │ Account / Ticket│
-    │                │ │                │ │ Lookup         │
-    │ • Orders       │ │ • Policies     │ │ • Accounts     │
-    │ • Shipments    │ │ • SOPs         │ │ • Tickets      │
-    │                │ │ • Agreements   │ │                │
-    │                │ │ • Known Issues │ │                │
-    └────────────────┘ └────────────────┘ └────────────────┘
-```
+![ParcelPilot Solution Architecture](images/parcelpilot_solution_architecture.png)
+
 
 The agent separates information retrieval from state-changing actions. Actions such as escalation require explicit confirmation before execution:
 
