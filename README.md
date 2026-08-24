@@ -196,7 +196,7 @@ The application follows the architecture below:
     └────────────────┘ └────────────────┘ └────────────────┘
 ---
 
-# 🛠️ Key Features
+🛠️ Key Features
 
 - 🤖 AI-powered support agent
 - 🔐 Role-based and account-scoped access
@@ -206,7 +206,7 @@ The application follows the architecture below:
 - 📄 Customer-specific agreement precedence
 - 🛠️ Known issue detection
 - 🔍 Sources and tools used for transparent responses
-
+```
 ---
 
 # 💻 Technology Stack
