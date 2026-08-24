@@ -29,7 +29,13 @@ ParcelPilot AI Support Agent allows different types of users to ask questions ab
 The agent determines which information sources and tools are required to answer each question, and applies **access restrictions** and **customer-specific agreement precedence** when generating responses.
 
 ---
+## 🖥️ Application Preview
 
+![ParcelPilot Homepage](images/homepage.png)
+
+## 💬 Example Output
+
+![ParcelPilot Example Output](images/output.png)
 ## 🛠️ Key Features
 
 - 🤖 AI-powered support agent
